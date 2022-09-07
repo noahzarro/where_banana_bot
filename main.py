@@ -1,38 +1,50 @@
+from tkinter import PhotoImage
 from PIL import Image
 from PIL import ImageDraw
 from PIL import ImageFont
 
 import json
-import requests
-import time
-import math
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup, File
-from telegram.ext import Updater, CommandHandler, CallbackQueryHandler, MessageHandler, Filters
-
+from telegram import Update
+from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
 
 # create Bot
 with open("token.json","r") as read_file:
-    TOKEN = json.load(read_file)[0]
-updater = Updater(token=TOKEN)
-dispatcher = updater.dispatcher
+    TOKEN = json.load(read_file)["token"]
+app = ApplicationBuilder().token(TOKEN).build()
 
 myFont = ImageFont.truetype("Ubuntu-B.ttf", 20)
 
-img = Image.open('template.jpg')
-I1 = ImageDraw.Draw(img)
-what = "agityp"
-to_draw = "where "+what
-#to_draw = "a"
-I1.text((580-len(to_draw)*4, 45), to_draw, fill=(20, 20, 20), font=myFont)
+def create_image(what: str):
+    img = Image.open('template.jpg')
+    I1 = ImageDraw.Draw(img)
+    to_draw = "where "+what
+    #to_draw = "a"
+    I1.text((580-len(to_draw)*4, 45), to_draw, fill=(20, 20, 20), font=myFont)
 
-img.save("temp.png")
+    img.save("temp.png")
 
-def start(bot, update):
-    bot.send_message(update.message.from_user.id, text="Aaaagi! Use /where <word> to generate an image")
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    await context.bot.send_message(
+        chat_id=update.effective_chat.id,
+        text="Aaaagi! Use /where <word> to generate an image"
+    )
 
-def start(bot, update):
-    bot.send_message(update.message.from_user.id, text="Aaaagi! Use /where <word> to generate an image")
+async def where(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    if len(context.args) > 0:
+        what = ' '.join(context.args)
+        create_image(what)
+        with open("temp.png", 'rb') as img_to_send:
+            await context.bot.send_photo(
+                chat_id=update.effective_chat.id,
+                photo=img_to_send
+            )
+    else:
+        await context.bot.send_message(
+            chat_id=update.effective_chat.id,
+            text="Aaaagi! Use /where <word> to generate an image"
+        )
 
+app.add_handler(CommandHandler("start", start))
+app.add_handler(CommandHandler("where", where))
 
-dispatcher.add_handler(CommandHandler('start', start))
-dispatcher.add_handler(CommandHandler('where', review))
+app.run_polling()
