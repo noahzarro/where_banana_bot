@@ -12,7 +12,7 @@ with open("token.json","r") as read_file:
     TOKEN = json.load(read_file)["token"]
 app = ApplicationBuilder().token(TOKEN).build()
 
-myFont = ImageFont.truetype("Ubuntu-B.ttf", 20)
+myFont = ImageFont.truetype("Ubuntu-Bold.ttf", 20)
 
 def create_image(what: str):
     img = Image.open('template.jpg')
