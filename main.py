@@ -7,9 +7,14 @@ import json
 from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
 
+import os
+
+TOKEN = os.environ.get("TOKEN")
+
 # create Bot
-with open("token.json","r") as read_file:
-    TOKEN = json.load(read_file)["token"]
+#with open("token.json","r") as read_file:
+#    TOKEN = json.load(read_file)["token"]
+
 app = ApplicationBuilder().token(TOKEN).build()
 
 myFont = ImageFont.truetype("Ubuntu-Bold.ttf", 20)
