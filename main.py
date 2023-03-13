@@ -1,3 +1,5 @@
+import os
+
 from PIL import Image
 from PIL import ImageDraw
 from PIL import ImageFont
@@ -5,7 +7,6 @@ from PIL import ImageFont
 from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
 
-import os
 
 FONT = ImageFont.truetype("Ubuntu-Bold.ttf", 20)
 
@@ -39,7 +40,7 @@ async def where(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             text="Aaaagi! Use /where <word> to generate an image",
         )
 
-if __name__ == "__main__":
+def main():
     token = os.environ.get("TOKEN")
 
     app = ApplicationBuilder().token(token).build()
@@ -48,3 +49,7 @@ if __name__ == "__main__":
     app.add_handler(CommandHandler("where", where))
 
     app.run_polling()
+
+
+if __name__ == "__main__":
+    main()
