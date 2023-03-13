@@ -7,12 +7,7 @@ from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
 
 import os
 
-TOKEN = os.environ.get("TOKEN")
-
-app = ApplicationBuilder().token(TOKEN).build()
-
 FONT = ImageFont.truetype("Ubuntu-Bold.ttf", 20)
-
 
 def create_image(what: str):
     img = Image.open("template.jpg")
@@ -44,8 +39,12 @@ async def where(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             text="Aaaagi! Use /where <word> to generate an image",
         )
 
+if __name__ == "__main__":
+    token = os.environ.get("TOKEN")
 
-app.add_handler(CommandHandler("start", start))
-app.add_handler(CommandHandler("where", where))
+    app = ApplicationBuilder().token(token).build()
 
-app.run_polling()
+    app.add_handler(CommandHandler("start", start))
+    app.add_handler(CommandHandler("where", where))
+
+    app.run_polling()
