@@ -11,12 +11,7 @@ import os
 
 TOKEN = os.environ.get("TOKEN")
 
-# create Bot
-# with open("token.json","r") as read_file:
-#    TOKEN = json.load(read_file)["token"]
-
 app = ApplicationBuilder().token(TOKEN).build()
-
 myFont = ImageFont.truetype("Ubuntu-Bold.ttf", 20)
 
 
@@ -24,7 +19,6 @@ def create_image(what: str):
     img = Image.open("template.jpg")
     I1 = ImageDraw.Draw(img)
     to_draw = "where " + what
-    # to_draw = "a"
     I1.text((580 - len(to_draw) * 4, 45), to_draw, fill=(20, 20, 20), font=myFont)
 
     img.save("temp.png")
