@@ -2,7 +2,6 @@ from PIL import Image
 from PIL import ImageDraw
 from PIL import ImageFont
 
-import json
 from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
 
@@ -11,14 +10,15 @@ import os
 TOKEN = os.environ.get("TOKEN")
 
 app = ApplicationBuilder().token(TOKEN).build()
-myFont = ImageFont.truetype("Ubuntu-Bold.ttf", 20)
+
+FONT = ImageFont.truetype("Ubuntu-Bold.ttf", 20)
 
 
 def create_image(what: str):
     img = Image.open("template.jpg")
     drawer = ImageDraw.Draw(img)
     to_draw = f"where {what}"
-    drawer.text((580 - len(to_draw) * 4, 45), to_draw, fill=(20, 20, 20), font=myFont)
+    drawer.text((580 - len(to_draw) * 4, 45), to_draw, fill=(20, 20, 20), font=FONT)
 
     img.save("temp.png")
 
